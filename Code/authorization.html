@@ -42,6 +42,21 @@
 			<div class="col-xs-4 col-xs-offset-4"><img style="width: 38%;" src="pics/icon_help.jpg"/></div>
 		</div>
 	</div>
+	<!-- Small modal For Auth Error-->
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" id="ModalError" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-sm">
+    		<div class="modal-content">
+      			<div class="modal-header">
+      				<h4 class="modal-title" id="mySmallModalLabel">Ошибка авторизации</h4>
+      			</div>
+      			<div class="modal-body">
+      				<p>Код ошибки</p>
+      				<p>Причина</p>
+      				<button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" aria-hidden="true">ОК</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -55,11 +70,12 @@
    							alert("ok");
    						})
    						.fail(function(){
-   							alert("Error");
+   							/*alert("Error"); */
+   							$("#ModalError").modal({
+   								keyboard: true
+   							})
    						})
-   					} 
-
-   					)
+   					})
    			);
 	</script>
   </body>
