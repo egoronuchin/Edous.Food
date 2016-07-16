@@ -1,4 +1,4 @@
 <?php
 session_start();
-echo(seesion_id());
+echo(session_id());
 ?>
