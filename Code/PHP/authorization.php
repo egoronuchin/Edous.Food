@@ -8,6 +8,4 @@ if(isset($_POST['auth_code'])){ //Авторизация клиента
 }else{
   echo json_encode($arr=array('session_id'=> session_id(), 'error_code'=>1, 'error_text'=>'Ошибка авторизации'));
 }
-
-
 ?>
