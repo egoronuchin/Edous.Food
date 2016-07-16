@@ -66,7 +66,7 @@
    		$( document ).ready(
    				$(".auth-btn").click(
    						function(){
-   						$.post("authorization.php", {auth_code: $(".auth-code-enter").val()}, function(){
+   						$.post("PHP/authorization.php", {auth_code: $(".auth-code-enter").val()}, function(){
    							alert("ok");
    						})
    						.fail(function(){
