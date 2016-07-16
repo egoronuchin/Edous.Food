@@ -67,13 +67,12 @@
    				$(".auth-btn").click(
    						function(){
    						$.post("PHP/authorization.php", {auth_code: $(".auth-code-enter").val()}, function(data){
-   							  	var obj = $.parseJSON(data);							
+   							  var obj = $.parseJSON(data);							
    								console.log(obj.session_id);
    								console.log(obj.link);
    								$(location).attr("href", obj.link);
    						})
    						.fail(function(){
-   							/*alert("Error"); */
    							$("#ModalError").modal({
    								keyboard: true
    							})
