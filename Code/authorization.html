@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cafe PI</title>
+
+	<!--Надо перебить в отдельный css файл-->
+	<style>
+		.input{
+			text-align: center;
+		}
+	</style>
+	
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+		<div class="row">
+			<div class="col-xs-4 col-xs-offset-4"><img style="width:70%" src="pics/icon_picafe.jpg"></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8 col-xs-offset-2">
+				<input type="text" class="form-control input auth-code-enter" size="5" maxlength="5" style="font-size:30px;">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8 col-xs-offset-2">
+				<button type="button" class="btn btn-primary btn-lg auth-btn">Войти</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-4 col-xs-offset-4"><img style="width: 38%;" src="pics/icon_help.jpg"/></div>
+		</div>
+	</div>
+	<!-- Small modal For Auth Error-->
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" id="ModalError" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-sm">
+    		<div class="modal-content">
+      			<div class="modal-header">
+      				<h4 class="modal-title" id="mySmallModalLabel">Ошибка авторизации</h4>
+      			</div>
+      			<div class="modal-body">
+      				<p>Код ошибки</p>
+      				<p>Причина</p>
+      				<button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" aria-hidden="true">ОК</button>
+      			</div>
+    		</div>
+  		</div>
+	</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+   	<script>
+   		$( document ).ready(
+   				$(".auth-btn").click(
+   						function(){
+   						$.post("authorization.php", {auth_code: $(".auth-code-enter").val()}, function(){
+   							alert("ok");
+   						})
+   						.fail(function(){
+   							/*alert("Error"); */
+   							$("#ModalError").modal({
+   								keyboard: true
+   							})
+   						})
+   					})
+   			);
+	</script>
+  </body>
+</html>
