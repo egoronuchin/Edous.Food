@@ -1,7 +1,7 @@
 <?php
 session_start();
 $auth_code = $_POST['auth_code'];
-if(isset($auth_code){ //Авторизация клиента
+if(isset($auth_code)){ //Авторизация клиента
   if($auth_code=='00000'){
     echo json_encode($arr=array('session_id'=> session_id(),'link'=>'PHP/menu.php'));
   }else{
