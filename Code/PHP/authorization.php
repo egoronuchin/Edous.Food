@@ -5,18 +5,18 @@ class Authorization{
         $login = filter_input(0, 'login'); 
         $password = md5('payforme'.filter_input(0,'password'));
         $TT = filter_input(0,'TT');
+        
         include_once 'db_connect.php'; //Подключение к БД
         
-        
         if($login AND $password){ //Авторизация для персонала
-            $this.Employ_Authorization($login, $password);
+            $this->Employ_Authorization($login, $password);
         }elseif ($auth_code AND $TT) { //Авторизация для клиента
             if($auth_code=='00000'){
                 echo json_encode(array('link'=>'PHP/menu.php'));
             }else{
-                $this.return_error();
+                $this->return_error();
             }
-            //$this.Client_Autorization($auth_code,$TT);
+            $this->Client_Autorization($auth_code,$TT);
         }else{
             $this->return_error();
         }
@@ -48,8 +48,9 @@ class Authorization{
         $row=$res->fetch();
         $numrows=$row['count'];
         if($numrows==1){
+            $_SESSION['ID_CONTACT']=$row['ID_CONTACT'];
             session_start();
-            if($row['role']=='WAITER'){
+            if($row['ROLE']=='WAITER'){
                 echo json_encode(array('link'=>'PHP/waiter.php'));
             }else{
                 echo json_encode(array('link'=>'PHP/admin.php'));
