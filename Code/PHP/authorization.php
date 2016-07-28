@@ -1,33 +1,33 @@
 <?php
 class Authorization{
     public function __construct(){
-        $auth_code = filter_input(0, 'auth_code'); //Код авторизации клиента
+        $authСode = filter_input(0, 'authСode'); //Код авторизации клиента
         $login = filter_input(0, 'login'); 
         $password = md5('payforme'.filter_input(0,'password'));
-        $TT = filter_input(0,'TT');
+        $tt = filter_input(0,'tt');
         
         include_once 'db_connect.php'; //Подключение к БД
         
         if($login AND $password){ //Авторизация для персонала
-            $this->Employ_Authorization($login, $password);
-        }elseif ($auth_code AND $TT) { //Авторизация для клиента
-            if($auth_code=='00000'){
+            $this->EmployAuthorization($login, $password);
+        }elseif ($authСode AND $tt) { //Авторизация для клиента
+            if($authСode=='00000'){
                 echo json_encode(array('link'=>'PHP/menu.php'));
             }else{
-                $this->return_error();
+                $this->ReturnError();
             }
-            $this->Client_Autorization($auth_code,$TT);
+            $this->ClientAutorization($authСode,$tt);
         }else{
-            $this->return_error();
+            $this->ReturnError();
         }
     }
     
-    private function Client_Autorization($auth_code, $TT){//Авторизация для клиента
-        $res = $pdo->query("SELECT COUNT(*) FROM `AUTHORIZAION` "
+    private function ClientAutorization($authСode, $tt){//Авторизация для клиента
+        $res = $pdo->query("SELECT COUNT(*) FROM `AUTHORIZATION` "
                 . "WHERE "
-                . "`ENTER_CODE` = '$auth_code'"
+                . "`ENTER_CODE` = '$authСode'"
                 . "AND `END` IS NULL"
-                . "AND `ID_TT` = '$TT'");
+                . "AND `ID_tt` = '$tt'");
         $res->setFetchMode(PDO::FETCH_ASSOC);
         $row=$res->fetch();
         $numrows=$row['count'];
@@ -35,11 +35,11 @@ class Authorization{
             session_start();
             echo json_encode(array('link'=>'PHP/menu.php'));
         }else{
-            $this->return_error();
+            $this->ReturnError();
         }
     }
     
-    private function Employ_Authorization($login, $password){//Авторизация для персонала
+    private function EmployAuthorization($login, $password){//Авторизация для персонала
         $res = $pdo->query("SELECT COUNT(ID_CONTACT),* FROM `CONTACT` "
                 . "WHERE "
                 . "`LOGIN` = '$login'"
@@ -56,11 +56,11 @@ class Authorization{
                 echo json_encode(array('link'=>'PHP/admin.php'));
             }
         }else{
-            $this->return_error();
+            $this->ReturnError();
         }
     }
 
-    private function return_error(){
+    private function ReturnError(){
         echo json_encode(array('error_code'=>1, 'error_text'=>'Ошибка авторизации'));
         exit();
     }
