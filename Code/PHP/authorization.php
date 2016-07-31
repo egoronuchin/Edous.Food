@@ -1,19 +1,70 @@
 <?php
-session_start();
-$auth_code = $_POST['auth_code'];
-if(isset($auth_code)){ //Авторизация клиента
-  if($auth_code=='00000'){
-    echo json_encode($arr=array('session_id'=> session_id(),'link'=>'PHP/menu.php'));
-  }else{
-    return_error();
-  }
-}elseif(isset($_POST['login']) AND isset($_POST['password'])){ //Авторизация оффика
-  
-}else{
-  return_error();
+class Authorization{
+    public function __construct(){
+        $authСode = filter_input(0, 'authСode'); //Код авторизации клиента
+        $login = filter_input(0, 'login'); 
+        $password = md5('payforme'.filter_input(0,'password'));
+        $tt = filter_input(0,'tt');
+        
+        include_once 'db_connect.php'; //Подключение к БД
+        
+        if($login AND $password){ //Авторизация для персонала
+            $this->EmployAuthorization($login, $password);
+        }elseif ($authСode AND $tt) { //Авторизация для клиента
+            if($authСode=='00000'){
+                echo json_encode(array('link'=>'PHP/menu.php'));
+            }else{
+                $this->ReturnError();
+            }
+            $this->ClientAutorization($authСode,$tt);
+        }else{
+            $this->ReturnError();
+        }
+    }
+    
+    private function ClientAutorization($authСode, $tt){//Авторизация для клиента
+        $res = $pdo->query("SELECT COUNT(*) FROM `AUTHORIZATION` "
+                . "WHERE "
+                . "`ENTER_CODE` = '$authСode'"
+                . "AND `END` IS NULL"
+                . "AND `ID_tt` = '$tt'");
+        $res->setFetchMode(PDO::FETCH_ASSOC);
+        $row=$res->fetch();
+        $numrows=$row['count'];
+        if($numrows==1){
+            session_start();
+            echo json_encode(array('link'=>'PHP/menu.php'));
+        }else{
+            $this->ReturnError();
+        }
+    }
+    
+    private function EmployAuthorization($login, $password){//Авторизация для персонала
+        $res = $pdo->query("SELECT COUNT(ID_CONTACT),* FROM `CONTACT` "
+                . "WHERE "
+                . "`LOGIN` = '$login'"
+                . "AND `PASSWORD` = '$password'");
+        $res->setFetchMode(PDO::FETCH_ASSOC);
+        $row=$res->fetch();
+        $numrows=$row['count'];
+        if($numrows==1){
+            $_SESSION['ID_CONTACT']=$row['ID_CONTACT'];
+            session_start();
+            if($row['ROLE']=='WAITER'){
+                echo json_encode(array('link'=>'PHP/waiter.php'));
+            }else{
+                echo json_encode(array('link'=>'PHP/admin.php'));
+            }
+        }else{
+            $this->ReturnError();
+        }
+    }
+
+    private function ReturnError(){
+        echo json_encode(array('error_code'=>1, 'error_text'=>'Ошибка авторизации'));
+        exit();
+    }
 }
 
-function return_error(){
-  echo json_encode($arr=array('session_id'=> session_id(), 'error_code'=>1, 'error_text'=>'Ошибка авторизации'));
-}
+$obj = new Authorization;
 ?>
