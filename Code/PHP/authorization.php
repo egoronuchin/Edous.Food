@@ -9,7 +9,8 @@ class Authorization{
         include_once 'db_connect.php'; //Подключение к БД
         
         if($login AND $password){ //Авторизация для персонала
-            $this->EmployAuthorization($login, $password);
+            $this->ReturnError();
+            //$this->EmployAuthorization($login, $password);
         }elseif ($authСode AND $tt) { //Авторизация для клиента
             if($authСode=='00000'){
                 echo json_encode(array('link'=>'PHP/menu.php'));
