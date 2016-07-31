@@ -6,7 +6,7 @@ class Authorization{
         $password = md5('payforme'.filter_input(0,'password'));
         $tt = filter_input(0,'tt');
         
-        include_once 'db_connect.php'; //Подключение к БД
+        //include_once 'db_connect.php'; //Подключение к БД
         
         if($login AND $password){ //Авторизация для персонала
             $this->ReturnError();
