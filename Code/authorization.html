@@ -87,18 +87,18 @@
    				$(".auth-btn").click(
    						function(){
    						$.post("PHP/authorization.php", {authCode: $(".auth-code-enter").val(), tt: "pi"}, function(data){
-   							  var obj = $.parseJSON(data);							
-   								console.log(obj.session_id);
-   								console.log(obj.link);
-                  console.log(obj.error_code);
-                  if(obj.error_code == 0 || obj.error_code == null){
-                    $(location).attr("href", obj.link);
-                  }
-                  else{
-                    $("#ModalError").modal({
-                      keyboard: true
-                    })
-                  }
+   							var obj = $.parseJSON(data);
+								console.log("ErrorCode = " + obj.error_code);							  
+   								console.log("Session Id = " + obj.session_id);
+   								console.log("Link = " + obj.link);								                  
+							if(obj.error_code == 0 || obj.error_code == null){
+								$(location).attr("href", obj.link);
+							}
+							else{
+								$("#ModalError").modal({
+									keyboard: true
+								})
+							}
    						})
    						.fail(function(){
    							$("#ModalError").modal({
