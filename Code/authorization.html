@@ -86,7 +86,7 @@
    		$( document ).ready(
    				$(".auth-btn").click(
    						function(){
-   						$.post("PHP/authorization.php", {authCode: $(".auth-code-enter").val(), tt: "pi"}, function(data){
+   						$.post("PHP/authorization.php", {authСode: $(".auth-code-enter").val(), tt: "pi"}, function(data){
    							  var obj = $.parseJSON(data);							
    								console.log(obj.session_id);
    								console.log(obj.link);

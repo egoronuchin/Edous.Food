@@ -1,13 +1,12 @@
 <?php
+Header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 class Authorization{
     public function __construct(){
         $authСode = filter_input(0, 'authСode'); //Код авторизации клиента
         $login = filter_input(0, 'login'); 
         $password = md5('payforme'.filter_input(0,'password'));
         $tt = filter_input(0,'tt');
-        
-        //include_once 'db_connect.php'; //Подключение к БД
-        
+		
         if($login AND $password){ //Авторизация для персонала
             $this->ReturnError();
             //$this->EmployAuthorization($login, $password);
@@ -17,7 +16,7 @@ class Authorization{
             }else{
                 $this->ReturnError();
             }
-            $this->ClientAutorization($authСode,$tt);
+            //$this->ClientAutorization($authСode,$tt);
         }else{
             $this->ReturnError();
         }
