@@ -1,4 +1,8 @@
 <?php
-session_start();
-echo(session_id());
+class Menu{
+	public function __construct(){
+		
+	}
+}
+$obj = new Menu;
 ?>
