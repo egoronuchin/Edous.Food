@@ -1,13 +1,13 @@
 <?php
+Header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 class Authorization{
     public function __construct(){
+		session_start();
         $authСode = filter_input(0, 'authСode'); //Код авторизации клиента
-        $login = filter_input(0, 'login'); 
-        $password = md5('payforme'.filter_input(0,'password'));
-        $tt = filter_input(0,'tt');
-        
-        //include_once 'db_connect.php'; //Подключение к БД
-        
+        $login = filter_input(0, 'login'); //Логин 
+        $password = md5('payforme'.filter_input(0,'password')); //Пароль
+        $tt = filter_input(0,'tt'); //Код торговой точки
+		
         if($login AND $password){ //Авторизация для персонала
             $this->ReturnError();
             //$this->EmployAuthorization($login, $password);
@@ -17,21 +17,13 @@ class Authorization{
             }else{
                 $this->ReturnError();
             }
-            $this->ClientAutorization($authСode,$tt);
+            //$this->ClientAutorization($authСode,$tt);
         }else{
             $this->ReturnError();
         }
     }
     
     private function ClientAutorization($authСode, $tt){//Авторизация для клиента
-        $res = $pdo->query("SELECT COUNT(*) FROM `AUTHORIZATION` "
-                . "WHERE "
-                . "`ENTER_CODE` = '$authСode'"
-                . "AND `END` IS NULL"
-                . "AND `ID_tt` = '$tt'");
-        $res->setFetchMode(PDO::FETCH_ASSOC);
-        $row=$res->fetch();
-        $numrows=$row['count'];
         if($numrows==1){
             session_start();
             echo json_encode(array('link'=>'PHP/menu.php'));
@@ -39,30 +31,18 @@ class Authorization{
             $this->ReturnError();
         }
     }
-    
     private function EmployAuthorization($login, $password){//Авторизация для персонала
-        $res = $pdo->query("SELECT COUNT(ID_CONTACT),* FROM `CONTACT` "
-                . "WHERE "
-                . "`LOGIN` = '$login'"
-                . "AND `PASSWORD` = '$password'");
-        $res->setFetchMode(PDO::FETCH_ASSOC);
-        $row=$res->fetch();
-        $numrows=$row['count'];
-        if($numrows==1){
-            $_SESSION['ID_CONTACT']=$row['ID_CONTACT'];
-            session_start();
-            if($row['ROLE']=='WAITER'){
-                echo json_encode(array('link'=>'PHP/waiter.php'));
-            }else{
-                echo json_encode(array('link'=>'PHP/admin.php'));
-            }
-        }else{
-            $this->ReturnError();
-        }
+		switch($row['ROLE']){
+			case "WAITER": print json_encode(array('link'=>'PHP/waiter.php')); break;
+			case "ADMINTT": print json_encode(array('link'=>'PHP/admin.php')); break;
+			case "ADMINTO": print json_encode(array('link'=>'PHP/admin.php')); break;
+			case "ADMIN": print json_encode(array('link'=>'PHP/admin.php')); break;
+			default: $this->ReturnError(); break;
     }
-
-    private function ReturnError(){
-        echo json_encode(array('error_code'=>1, 'error_text'=>'Ошибка авторизации'));
+    private function ReturnError($errorText=NULL){
+		if($errorText==NULL)
+			$errorText = 'Ошибка авторизации';
+		print json_encode(array('error_code'=>1, 'error_text'=>$errorText));
         exit();
     }
 }
